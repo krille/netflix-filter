@@ -1,3 +1,7 @@
+.input-range {
+	user-select: none;
+}
+
 .input-range__track--active {
 	background-color: red !important;
 }
@@ -5,4 +9,5 @@
 .input-range__slider {
 	background-color: red !important;
 	border-color: red !important;
+	user-select: none;
 }
