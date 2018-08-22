@@ -5,7 +5,7 @@ import Header from './components/Header'
 import Filter from './components/Filter'
 import Movies from './components/Movies'
 import styled from 'styled-components';
-import { Transition } from 'react-spring'
+import { Transition, animated, config } from 'react-spring'
 import CloseIcon from '@material-ui/icons/Close';
 
 import './App.css';
@@ -16,7 +16,7 @@ const API = 'http://www.omdbapi.com/?apikey=99464486&';
 const DEFAULT_QUERY = 's=batman';
 */
 
-const StyledModalBackDrop = styled.div`
+const StyledModalBackDrop = styled(animated.div)`
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -27,7 +27,7 @@ const StyledModalBackDrop = styled.div`
 `
 
 
-const StyledModal = styled.div`
+const StyledModal = styled(animated.div)`
 	box-sizing: border-box;
 	position: fixed;
 	top: 50%;
@@ -229,7 +229,11 @@ class App extends Component {
 				<Filter update={this.updateInterval} interval={interval} />
 				<Movies movies={this.movies} filter={interval} showmodal={this.showModal} />
 				<Modal>
-					<Transition from={{ opacity: 0, transform: 'translate(-50%, -400%)' }} enter={{ opacity: 1, transform: 'translate(-50%, -50%)' }} leave={{ opacity: 0, transform: 'translate(-50%, 200%)' }}>
+					<Transition
+						native
+						from={{ opacity: 0, transform: 'translate(-50%, -400%)' }}
+						enter={{ opacity: 1, transform: 'translate(-50%, -50%)' }}
+						leave={{ opacity: 0, transform: 'translate(-50%, 200%)' }}>
 						{showModal && (
 							styles => (
 								<StyledModal style={{...styles}}>
@@ -239,7 +243,12 @@ class App extends Component {
 							)
 						)}
 					</Transition>
-					<Transition from={{ opacity: 0 }} enter={{ opacity: 1 }} leave={{ opacity: 0 }}>
+					<Transition
+						native
+						config={{ ...config.default, friction: 15, overshootClamping: true }}
+						from={{ opacity: 0 }}
+						enter={{ opacity: 1 }}
+						leave={{ opacity: 0 }}>
 						{showModal && (
 							styles => (
 								<StyledModalBackDrop onClick={this.hideModal} style={{...styles}} />
