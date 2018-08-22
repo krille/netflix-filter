@@ -1,11 +1,12 @@
 import React, { Component, Fragment } from 'react'
-import Modal from './Modal'
-import InputRange from 'react-input-range'
+import Modal from './components/Modal'
+import ModalContent from './components/ModalContent'
+import Header from './components/Header'
+import Filter from './components/Filter'
+import Movies from './components/Movies'
 import styled from 'styled-components';
 import { Transition } from 'react-spring'
-import StarIcon from '@material-ui/icons/Star';
 import CloseIcon from '@material-ui/icons/Close';
-// import InfiniteScroll from 'react-infinite-scroller'
 
 import './App.css';
 import 'react-input-range/lib/css/index.css'
@@ -14,64 +15,6 @@ import 'react-input-range/lib/css/index.css'
 const API = 'http://www.omdbapi.com/?apikey=99464486&';
 const DEFAULT_QUERY = 's=batman';
 */
-
-const Title = styled.h1`
-  font-size: 3rem;
-  text-align: center;
-  color: red;
-`
-
-const SubTitle = styled.h2`
-	margin-bottom: 1rem;
-	font-size: 1rem;
-	text-align: center;
-	color: #333;
-`
-
-const Grid = styled.ul`
-	margin: auto;
-	padding: 1rem;
-	max-width: 1400px;
-	list-style-type: none;
-	display: grid;
-	grid-template-columns: repeat(1, 1fr);
-	grid-gap: 1rem;
-	align-items: stretch;
-
-	@media (min-width: 500px) {
-		grid-template-columns: repeat(2, 1fr);
-	}
-
-	@media (min-width: 768px) {
-		grid-template-columns: repeat(3, 1fr);
-	}
-
-	@media (min-width: 1024px) {
-		grid-template-columns: repeat(4, 1fr);
-	}
-`
-
-const GridItem = styled.li`
-	padding: 1rem;
-	text-align: center;
-	background-color: #fafafa;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-	transition: background-color, transform 200ms ease;
-	overflow: hidden;
-	cursor: pointer;
-
-	&:hover {
-		background-color: #f0f0f0;
-		transform: scale(1.02);
-	}
-`
-
-const FilterWrapper = styled.div`
-	margin: 0 auto 3rem;
-	padding: 0 2rem;
-	text-align: center;
-	max-width: 500px;
-`
 
 const StyledModalBackDrop = styled.div`
 	position: fixed;
@@ -117,110 +60,6 @@ const StyledModalCloseButton = styled.button`
 	justify-content: center;
 	cursor: pointer;
 `
-
-const StyledModalHeader = styled.header`
-	display: flex;
-	justify-content: space-between;
-	align-items: flex-end;
-
-	> h1 {
-		margin: 0;
-	}
-`
-
-const StyledModalScore = styled.span`
-	display: flex;
-	align-items: center;
-
-	> :first-child {
-		margin-right: 0.2em;
-	}
-`
-
-
-
-
-
-
-class Header extends Component {
-	render() {
-		return (
-			<header>
-				<Title>Netflix filter</Title>
-			</header>
-		)
-	}
-}
-
-class Filter extends Component {
-	render() {
-		let { interval, update } = this.props
-
-		return (
-			<FilterWrapper>
-				<SubTitle>imdb score</SubTitle>
-				<InputRange
-					step={0.1}
-					maxValue={10}
-					minValue={0}
-					value={interval}
-					onChange={newInterval => update(newInterval)} />
-			</FilterWrapper>
-		)
-	}
-}
-
-class Movies extends Component {
-	render() {
-		const { movies, filter, showmodal } = this.props
-
-		return (
-			<Grid>
-				{
-					movies.map( (movie, index) => (
-						<Movie filter={filter} movieData={movie} key={index} showmodal={showmodal} />
-					))
-				}
-			</Grid>
-		)
-	}
-}
-
-class Movie extends Component {
-
-	render() {
-		const { filter, movieData, showmodal } = this.props
-		const { title, score } = movieData
-
-		return (
-			<Transition from={{ opacity: 0, maxHeight: 0 }} enter={{ opacity: 1, maxHeight: 200 }} leave={{ opacity: 0, maxHeight: 0 }}>
-				{(score >= filter.min && score <= filter.max) && (
-					styles => (
-						<GridItem onClick={() => showmodal(movieData)} style={{...styles}}>
-							<h2>{title}</h2>
-						</GridItem>
-					)
-				)}
-			</Transition>
-		)
-	}
-}
-
-class MovieDetails extends Component {
-	render() {
-		const { title, score, plot } = this.props.modalData
-
-		return (
-			<Fragment>
-				<StyledModalHeader>
-					<h1>{title}</h1>
-					<StyledModalScore><StarIcon titleAccess="Score:" /> {score}</StyledModalScore>
-				</StyledModalHeader>
-				<p>{plot}</p>
-			</Fragment>
-		)
-	}
-}
 
 /*
 class Hits extends Component {
@@ -394,7 +233,7 @@ class App extends Component {
 						{showModal && (
 							styles => (
 								<StyledModal style={{...styles}}>
-									<MovieDetails modalData={this.modal} />
+									<ModalContent modalData={this.modal} />
 									<StyledModalCloseButton onClick={this.hideModal}><CloseIcon titleAccess="Close" /></StyledModalCloseButton>
 								</StyledModal>
 							)
