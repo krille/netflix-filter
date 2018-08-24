@@ -45,7 +45,7 @@ const StyledGridItem = styled(animated.li)`
 
 class Movie extends Component {
 	render() {
-		const { movie, filter, showmodal } = this.props
+		const { movie, filter, toggle, updateModalContent } = this.props
 
 		return (
 			<Transition
@@ -57,7 +57,10 @@ class Movie extends Component {
 				{
 					(movie.score >= filter.min && movie.score <= filter.max) && (
 						styles => (
-							<StyledGridItem style={{...styles}} onClick={() => showmodal(movie)}>
+							<StyledGridItem style={{...styles}} onClick={() => {
+								updateModalContent(movie)
+								toggle()
+							}}>
 								<h2>{movie.title}</h2>
 							</StyledGridItem>
 						)
@@ -71,12 +74,12 @@ class Movie extends Component {
 export default class Movies extends Component {
 
 	render() {
-		const { movies, filter, showmodal } = this.props
+		const { movies, filter, toggle, updateModalContent } = this.props
 
 		return (
 			<StyledGrid>
 				{movies.map((movie, index) => (
-					<Movie movie={movie} filter={filter} key={index} showmodal={showmodal} />
+					<Movie movie={movie} filter={filter} key={index} toggle={toggle} updateModalContent={updateModalContent} />
 				))}
 			</StyledGrid>
 		)

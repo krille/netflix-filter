@@ -1,20 +1,20 @@
 import { Component } from 'react'
 import ReactDOM from 'react-dom'
 
-const modalRoot = document.getElementById('modal')
+const portalRoot = document.getElementById('portal')
 
-export default class Modal extends Component {
+export default class Portal extends Component {
 	constructor() {
 		super()
 		this.el = document.createElement('div')
 	}
 
 	componentDidMount() {
-		modalRoot.appendChild(this.el)
+		portalRoot.appendChild(this.el)
 	}
 
 	componentWillUnmount() {
-		modalRoot.removeChild(this.el)
+		portalRoot.removeChild(this.el)
 	}
 
 	render() {

@@ -18,7 +18,7 @@ const StyledFilterWrapper = styled.div`
 
 export default class Filter extends Component {
 	render() {
-		let { interval, update } = this.props
+		const { interval, updateInterval } = this.props
 
 		return (
 			<StyledFilterWrapper>
@@ -28,7 +28,7 @@ export default class Filter extends Component {
 					maxValue={10}
 					minValue={0}
 					value={interval}
-					onChange={newInterval => update(newInterval)} />
+					onChange={newInterval => updateInterval(newInterval)} />
 			</StyledFilterWrapper>
 		)
 	}
