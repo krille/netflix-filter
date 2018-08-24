@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components';
-import { Transition, animated, config } from 'react-spring'
+import { MovieContext } from '../MovieContext'
+import { Transition, animated } from 'react-spring'
 
 const StyledGrid = styled.ul`
 	box-sizing: border-box;
@@ -45,24 +46,29 @@ const StyledGridItem = styled(animated.li)`
 
 class Movie extends Component {
 	render() {
-		const { movie, filter, toggle, updateModalContent } = this.props
+		const { movie, interval, toggle } = this.props
 
 		return (
 			<Transition
 				native
-				config={{ ...config.default, friction: 15, overshootClamping: true }}
+				config={{ overshootClamping: true }}
 				from={{ opacity: 0, maxHeight: 0 }}
 				enter={{ opacity: 1, maxHeight: 200 }}
 				leave={{ opacity: 0, maxHeight: 0 }}>
 				{
-					(movie.score >= filter.min && movie.score <= filter.max) && (
+					(movie.score >= interval.min && movie.score <= interval.max) && (
 						styles => (
-							<StyledGridItem style={{...styles}} onClick={() => {
-								updateModalContent(movie)
-								toggle()
-							}}>
-								<h2>{movie.title}</h2>
-							</StyledGridItem>
+							<MovieContext.Consumer>
+								{context => (
+									<StyledGridItem
+										style={{...styles}}
+										onMouseDown={() => {context.updateMovieModal(movie)}}
+										onClick={toggle}
+									>
+										<h2>{movie.title}</h2>
+									</StyledGridItem>
+								)}
+							</MovieContext.Consumer>
 						)
 					)
 				}
@@ -74,14 +80,18 @@ class Movie extends Component {
 export default class Movies extends Component {
 
 	render() {
-		const { movies, filter, toggle, updateModalContent } = this.props
+		const { interval, toggle } = this.props
 
 		return (
-			<StyledGrid>
-				{movies.map((movie, index) => (
-					<Movie movie={movie} filter={filter} key={index} toggle={toggle} updateModalContent={updateModalContent} />
-				))}
-			</StyledGrid>
+			<MovieContext.Consumer>
+				{context =>(
+					<StyledGrid>
+						{context.movies.map((movie, index) => (
+							<Movie movie={movie} interval={interval} key={index} toggle={toggle} />
+						))}
+					</StyledGrid>
+				)}
+			</MovieContext.Consumer>
 		)
 	}
 }
